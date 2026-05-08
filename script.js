@@ -49,6 +49,9 @@ const elements = {
   vdotEstimate: document.querySelector("#vdotEstimate"),
   criticalEstimate: document.querySelector("#criticalEstimate"),
   modelSpread: document.querySelector("#modelSpread"),
+  timeIntervalTable: document.querySelector("#timeIntervalTable"),
+  distanceIntervalTable: document.querySelector("#distanceIntervalTable"),
+  racePredictionTable: document.querySelector("#racePredictionTable"),
   confidence: document.querySelector("#confidence"),
   canvas: document.querySelector("#paceCanvas"),
 };
@@ -317,6 +320,121 @@ function getTrainingBand(secondsPerKm) {
   };
 }
 
+function getIntervalRange(secondsPerKm, easyMultiplier, steadyMultiplier) {
+  return {
+    fast: secondsPerKm * easyMultiplier,
+    slow: secondsPerKm * steadyMultiplier,
+  };
+}
+
+function getIntervalRows(secondsPerKm) {
+  return {
+    time: [
+      {
+        label: "3-4 min",
+        repeat: "8-12x",
+        rest: "60 sec",
+        range: getIntervalRange(secondsPerKm, 1.005, 1.025),
+      },
+      {
+        label: "6-8 min",
+        repeat: "4-6x",
+        rest: "90 sec",
+        range: getIntervalRange(secondsPerKm, 1.015, 1.035),
+      },
+      {
+        label: "10-12 min",
+        repeat: "3x",
+        rest: "120 sec",
+        range: getIntervalRange(secondsPerKm, 1.025, 1.045),
+      },
+    ],
+    distance: [
+      {
+        label: "1 km",
+        repeat: "8-12x",
+        rest: "60 sec",
+        range: getIntervalRange(secondsPerKm, 1.005, 1.025),
+      },
+      {
+        label: "2 km",
+        repeat: "4-6x",
+        rest: "90 sec",
+        range: getIntervalRange(secondsPerKm, 1.015, 1.035),
+      },
+      {
+        label: "3 km",
+        repeat: "3x",
+        rest: "120 sec",
+        range: getIntervalRange(secondsPerKm, 1.025, 1.045),
+      },
+    ],
+  };
+}
+
+function formatPaceRange(range) {
+  const fast = formatPace(range.fast, "km").replace(" / km", "");
+  const slow = formatPace(range.slow, "km");
+  return `${fast}-${slow}`;
+}
+
+function renderIntervalTable(container, rows) {
+  container.innerHTML = rows
+    .map(
+      (row) => `
+        <div class="interval-row">
+          <div><span>Work</span><strong>${row.label}</strong></div>
+          <div><span>Pace range</span><strong>${formatPaceRange(row.range)}</strong></div>
+          <div><span>Repeat</span><strong>${row.repeat}</strong></div>
+          <div><span>Rest</span><strong>${row.rest}</strong></div>
+        </div>
+      `,
+    )
+    .join("");
+}
+
+function getRacePredictions(pureSecondsPerKm, conditionFactor, modelSpreadPercent) {
+  const hourDistanceKm = 3600 / pureSecondsPerKm;
+  const spreadPadding = Math.min(Math.max(modelSpreadPercent / 2, 0.8), 3.5);
+  const races = [
+    { label: "5K", distanceKm: 5, uncertainty: 1.4 },
+    { label: "10K", distanceKm: 10, uncertainty: 1.6 },
+    { label: "Half marathon", distanceKm: 21.0975, uncertainty: 2.2 },
+    { label: "Marathon", distanceKm: 42.195, uncertainty: 3.2 },
+  ];
+
+  return races.map((race) => {
+    const pureSeconds = 3600 * (race.distanceKm / hourDistanceKm) ** RIEGEL_EXPONENT;
+    const actualSeconds = pureSeconds * conditionFactor;
+    const rangePercent = (race.uncertainty + spreadPadding) / 100;
+
+    return {
+      ...race,
+      purePace: pureSeconds / race.distanceKm,
+      actualPace: actualSeconds / race.distanceKm,
+      lowPace: (actualSeconds / race.distanceKm) * (1 - rangePercent),
+      highPace: (actualSeconds / race.distanceKm) * (1 + rangePercent),
+      lowTime: actualSeconds * (1 - rangePercent),
+      highTime: actualSeconds * (1 + rangePercent),
+    };
+  });
+}
+
+function renderRacePredictions(container, predictions) {
+  container.innerHTML = predictions
+    .map(
+      (race) => `
+        <div class="race-row">
+          <div><span>Race</span><strong>${race.label}</strong></div>
+          <div><span>Actual pace range</span><strong>${formatPace(race.lowPace, "km").replace(" / km", "")}-${formatPace(race.highPace, "km")}</strong></div>
+          <div><span>Pure pace</span><strong>${formatPace(race.purePace, "km")}</strong></div>
+          <div><span>Finish range</span><strong>${formatClock(race.lowTime)}-${formatClock(race.highTime)}</strong></div>
+        </div>
+      `,
+    )
+    .join("");
+}
+
 function getWeatherAdjustment(tempC, humidity) {
   const rh = clamp(humidity, 0, 100);
   const heatDegrees = Math.max(0, tempC - 12);
@@ -551,6 +669,13 @@ function updateInterface() {
     ? formatPace(threshold.critical.secondsPerKm, "km")
     : "Add second effort";
   elements.modelSpread.textContent = formatPercent(threshold.spreadPercent).replace("+", "");
+  const intervalRows = getIntervalRows(actualSecondsPerKm);
+  renderIntervalTable(elements.timeIntervalTable, intervalRows.time);
+  renderIntervalTable(elements.distanceIntervalTable, intervalRows.distance);
+  renderRacePredictions(
+    elements.racePredictionTable,
+    getRacePredictions(pureSecondsPerKm, adjustment.factor, threshold.spreadPercent),
+  );
   elements.confidence.textContent =
     elements.thresholdMethod.value === "critical" && !threshold.critical
       ? "Needs second effort"

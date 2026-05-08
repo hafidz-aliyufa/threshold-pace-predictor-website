@@ -276,6 +276,8 @@ h2 {
 .training-band,
 .comparison-grid,
 .model-grid,
+.interval-section,
+.race-section,
 .notes {
   position: relative;
   z-index: 1;
@@ -367,6 +369,80 @@ h2 {
   background: rgba(240, 239, 231, 0.62);
 }
 
+.interval-section {
+  display: grid;
+  gap: 14px;
+  border: 1px solid rgba(31, 122, 88, 0.2);
+  border-radius: 8px;
+  padding: 18px;
+  background: rgba(31, 122, 88, 0.07);
+}
+
+.race-section {
+  display: grid;
+  gap: 14px;
+  border: 1px solid rgba(25, 114, 123, 0.2);
+  border-radius: 8px;
+  padding: 18px;
+  background: rgba(25, 114, 123, 0.07);
+}
+
+.interval-groups {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.interval-groups h3 {
+  margin: 0 0 8px;
+  font-size: 0.95rem;
+  letter-spacing: 0;
+}
+
+.interval-table {
+  display: grid;
+  gap: 8px;
+}
+
+.race-table {
+  display: grid;
+  gap: 8px;
+}
+
+.interval-row,
+.race-row {
+  display: grid;
+  grid-template-columns: 0.9fr 1fr 0.8fr 0.7fr;
+  gap: 8px;
+  align-items: center;
+  min-height: 56px;
+  border: 1px solid rgba(216, 214, 203, 0.9);
+  border-radius: 8px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.race-row {
+  grid-template-columns: 0.7fr 1fr 1fr 1fr;
+}
+
+.interval-row span,
+.race-row span {
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+
+.interval-row strong,
+.race-row strong {
+  display: block;
+  margin-top: 3px;
+  font-size: 0.96rem;
+  letter-spacing: 0;
+}
+
 .notes {
   border-left: 4px solid var(--gold);
   padding-left: 14px;
@@ -403,6 +479,7 @@ h2 {
   .metrics,
   .comparison-grid,
   .model-grid,
+  .interval-groups,
   .time-inputs,
   .pace-inputs,
   .secondary-effort,
@@ -419,6 +496,14 @@ h2 {
   .training-band {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .interval-row {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .race-row {
+    grid-template-columns: 1fr 1fr;
   }
 
   .training-band output {
