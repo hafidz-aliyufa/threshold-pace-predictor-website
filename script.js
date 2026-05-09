@@ -62,9 +62,12 @@ const elements = {
   timeIntervalTable: document.querySelector("#timeIntervalTable"),
   distanceIntervalTable: document.querySelector("#distanceIntervalTable"),
   racePredictionTable: document.querySelector("#racePredictionTable"),
+  resetSavedData: document.querySelector("#resetSavedData"),
   confidence: document.querySelector("#confidence"),
   canvas: document.querySelector("#paceCanvas"),
 };
+
+const STORAGE_KEY = "thresholdPacePredictor.formState.v1";
 
 const modelAdjustments = {
   conservative: 1.015,
@@ -192,6 +195,74 @@ function syncRaceProfileDistance(distanceKm) {
     elements.raceProfileDistanceUnit,
     raceProfileDistanceTouched,
   );
+}
+
+function getSavedControls() {
+  return [...elements.form.querySelectorAll("input, select")];
+}
+
+function saveFormState() {
+  const state = {};
+
+  getSavedControls().forEach((control) => {
+    if (!control.id && control.type !== "radio") {
+      return;
+    }
+
+    if (control.type === "radio") {
+      state[`radio:${control.name}`] = control.checked ? control.value : state[`radio:${control.name}`];
+      return;
+    }
+
+    if (control.type === "checkbox") {
+      state[control.id] = control.checked;
+      return;
+    }
+
+    state[control.id] = control.value;
+  });
+
+  state.profileDistanceTouched = profileDistanceTouched;
+  state.raceProfileDistanceTouched = raceProfileDistanceTouched;
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function restoreFormState() {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (!saved) {
+    return;
+  }
+
+  try {
+    const state = JSON.parse(saved);
+    getSavedControls().forEach((control) => {
+      if (control.type === "radio") {
+        control.checked = state[`radio:${control.name}`] === control.value;
+        return;
+      }
+
+      if (!(control.id in state)) {
+        return;
+      }
+
+      if (control.type === "checkbox") {
+        control.checked = Boolean(state[control.id]);
+        return;
+      }
+
+      control.value = state[control.id];
+    });
+
+    profileDistanceTouched = Boolean(state.profileDistanceTouched);
+    raceProfileDistanceTouched = Boolean(state.raceProfileDistanceTouched);
+  } catch {
+    localStorage.removeItem(STORAGE_KEY);
+  }
+}
+
+function resetSavedFormState() {
+  localStorage.removeItem(STORAGE_KEY);
+  window.location.reload();
 }
 
 function formatClock(totalSeconds) {
@@ -773,8 +844,6 @@ function updateInterface() {
   drawChart(actualSecondsPerKm, raceSeconds, distanceKm, pureSecondsPerKm, raceSecondsPerKm);
 }
 
-elements.form.addEventListener("input", updateInterface);
-elements.form.addEventListener("change", updateInterface);
 elements.profileDistance.addEventListener("input", () => {
   profileDistanceTouched = true;
 });
@@ -787,6 +856,16 @@ elements.raceProfileDistance.addEventListener("input", () => {
 elements.raceProfileDistanceUnit.addEventListener("change", () => {
   raceProfileDistanceTouched = true;
 });
+elements.form.addEventListener("input", () => {
+  updateInterface();
+  saveFormState();
+});
+elements.form.addEventListener("change", () => {
+  updateInterface();
+  saveFormState();
+});
+elements.resetSavedData.addEventListener("click", resetSavedFormState);
 window.addEventListener("resize", updateInterface);
 
+restoreFormState();
 updateInterface();

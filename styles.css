@@ -281,6 +281,33 @@ h3 {
   accent-color: var(--blue);
 }
 
+.utility-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 2px 4px 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 620;
+}
+
+.utility-row button {
+  min-height: 32px;
+  border: 0;
+  border-radius: 999px;
+  padding: 0 13px;
+  color: var(--blue);
+  background: rgba(0, 113, 227, 0.09);
+  box-shadow: inset 0 0 0 1px rgba(0, 113, 227, 0.12);
+  cursor: pointer;
+  font-weight: 720;
+}
+
+.utility-row button:focus {
+  outline: 4px solid rgba(0, 113, 227, 0.14);
+}
+
 .result-stage {
   position: relative;
   overflow: hidden;
