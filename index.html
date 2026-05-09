@@ -7,292 +7,393 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <main class="shell">
-      <section class="workspace" aria-label="Threshold pace calculator">
-        <div class="panel input-panel">
-          <div class="brand-row">
-            <div class="mark" aria-hidden="true">TP</div>
-            <div>
-              <p class="eyebrow">Race performance model</p>
-              <h1>Threshold Pace Predictor</h1>
-            </div>
+    <main class="app-shell">
+      <header class="app-header">
+        <div class="brand-row">
+          <div class="mark" aria-hidden="true">TP</div>
+          <div>
+            <p class="eyebrow">Runner Lab</p>
+            <h1>Threshold Pace</h1>
           </div>
+        </div>
+        <p class="header-copy">Race-fit pacing for threshold work, intervals, and race day.</p>
+      </header>
 
+      <section class="workspace" aria-label="Threshold pace calculator">
+        <aside class="input-panel" aria-label="Inputs">
           <form id="calculator" class="form-grid">
-            <label class="field">
-              <span>Race distance</span>
-              <select id="distance">
-                <option value="5">5K</option>
-                <option value="10">10K</option>
-                <option value="21.0975">Half marathon</option>
-                <option value="42.195">Marathon</option>
-                <option value="1.609344">1 mile</option>
-                <option value="3">3K</option>
-                <option value="custom">Custom</option>
-              </select>
-            </label>
+            <section class="settings-group">
+              <div class="group-heading">
+                <p class="eyebrow">Race</p>
+                <h2>Performance</h2>
+              </div>
 
-            <div class="custom-distance" id="customDistance" hidden>
               <label class="field">
-                <span>Custom distance</span>
-                <input id="customDistanceValue" type="number" min="0.1" step="0.01" value="8" />
-              </label>
-              <label class="field compact">
-                <span>Unit</span>
-                <select id="customDistanceUnit">
-                  <option value="km">km</option>
-                  <option value="mi">mi</option>
-                </select>
-              </label>
-            </div>
-
-            <fieldset class="segmented" aria-label="Input type">
-              <legend>Input type</legend>
-              <label>
-                <input type="radio" name="inputMode" value="time" checked />
-                <span>Finish time</span>
-              </label>
-              <label>
-                <input type="radio" name="inputMode" value="pace" />
-                <span>Race pace</span>
-              </label>
-            </fieldset>
-
-            <div class="time-inputs" id="timeInputs">
-              <label class="field">
-                <span>Hours</span>
-                <input id="hours" type="number" min="0" step="1" value="0" inputmode="numeric" />
-              </label>
-              <label class="field">
-                <span>Minutes</span>
-                <input id="minutes" type="number" min="0" step="1" value="20" inputmode="numeric" />
-              </label>
-              <label class="field">
-                <span>Seconds</span>
-                <input id="seconds" type="number" min="0" step="1" value="0" inputmode="numeric" />
-              </label>
-            </div>
-
-            <div class="pace-inputs" id="paceInputs" hidden>
-              <label class="field">
-                <span>Minutes</span>
-                <input id="paceMinutes" type="number" min="0" step="1" value="4" inputmode="numeric" />
-              </label>
-              <label class="field">
-                <span>Seconds</span>
-                <input id="paceSeconds" type="number" min="0" step="1" value="0" inputmode="numeric" />
-              </label>
-              <label class="field compact">
-                <span>Per</span>
-                <select id="paceUnit">
-                  <option value="km">km</option>
-                  <option value="mi">mile</option>
-                </select>
-              </label>
-            </div>
-
-            <label class="field">
-              <span>Threshold method</span>
-              <select id="thresholdMethod">
-                <option value="blend">Blend valid methods</option>
-                <option value="riegel">Riegel one-hour</option>
-                <option value="vdot">VDOT equivalent</option>
-                <option value="critical">Critical speed</option>
-              </select>
-            </label>
-
-            <label class="field">
-              <span>Bias</span>
-              <select id="model">
-                <option value="balanced">Balanced threshold</option>
-                <option value="conservative">Conservative</option>
-                <option value="aggressive">Aggressive</option>
-              </select>
-            </label>
-
-            <label class="check-row">
-              <input id="useSecondEffort" type="checkbox" />
-              <span>Use a second race or time trial for critical speed</span>
-            </label>
-
-            <div class="secondary-effort" id="secondaryEffort" hidden>
-              <label class="field">
-                <span>Second distance</span>
-                <select id="secondDistance">
-                  <option value="10">10K</option>
+                <span>Race distance</span>
+                <select id="distance">
                   <option value="5">5K</option>
-                  <option value="3">3K</option>
-                  <option value="1.609344">1 mile</option>
+                  <option value="10">10K</option>
                   <option value="21.0975">Half marathon</option>
+                  <option value="42.195">Marathon</option>
+                  <option value="1.609344">1 mile</option>
+                  <option value="3">3K</option>
                   <option value="custom">Custom</option>
                 </select>
               </label>
-              <label class="field">
-                <span>Hours</span>
-                <input id="secondHours" type="number" min="0" step="1" value="0" inputmode="numeric" />
-              </label>
-              <label class="field">
-                <span>Minutes</span>
-                <input id="secondMinutes" type="number" min="0" step="1" value="42" inputmode="numeric" />
-              </label>
-              <label class="field">
-                <span>Seconds</span>
-                <input id="secondSeconds" type="number" min="0" step="1" value="0" inputmode="numeric" />
-              </label>
-            </div>
 
-            <div class="custom-distance" id="secondCustomDistance" hidden>
+              <div class="custom-distance" id="customDistance" hidden>
+                <label class="field">
+                  <span>Custom distance</span>
+                  <input id="customDistanceValue" type="number" min="0.1" step="0.01" value="8" />
+                </label>
+                <label class="field compact">
+                  <span>Unit</span>
+                  <select id="customDistanceUnit">
+                    <option value="km">km</option>
+                    <option value="mi">mi</option>
+                  </select>
+                </label>
+              </div>
+
+              <fieldset class="segmented" aria-label="Input type">
+                <legend>Input type</legend>
+                <label>
+                  <input type="radio" name="inputMode" value="time" checked />
+                  <span>Finish time</span>
+                </label>
+                <label>
+                  <input type="radio" name="inputMode" value="pace" />
+                  <span>Race pace</span>
+                </label>
+              </fieldset>
+
+              <div class="time-inputs" id="timeInputs">
+                <label class="field">
+                  <span>Hours</span>
+                  <input id="hours" type="number" min="0" step="1" value="0" inputmode="numeric" />
+                </label>
+                <label class="field">
+                  <span>Minutes</span>
+                  <input id="minutes" type="number" min="0" step="1" value="20" inputmode="numeric" />
+                </label>
+                <label class="field">
+                  <span>Seconds</span>
+                  <input id="seconds" type="number" min="0" step="1" value="0" inputmode="numeric" />
+                </label>
+              </div>
+
+              <div class="pace-inputs" id="paceInputs" hidden>
+                <label class="field">
+                  <span>Minutes</span>
+                  <input id="paceMinutes" type="number" min="0" step="1" value="4" inputmode="numeric" />
+                </label>
+                <label class="field">
+                  <span>Seconds</span>
+                  <input id="paceSeconds" type="number" min="0" step="1" value="0" inputmode="numeric" />
+                </label>
+                <label class="field compact">
+                  <span>Per</span>
+                  <select id="paceUnit">
+                    <option value="km">km</option>
+                    <option value="mi">mile</option>
+                  </select>
+                </label>
+              </div>
+            </section>
+
+            <section class="settings-group">
+              <div class="group-heading">
+                <p class="eyebrow">Race day</p>
+                <h2>Performance Conditions</h2>
+              </div>
+
+              <div class="condition-grid">
+                <label class="field">
+                  <span>Temperature</span>
+                  <input id="raceTemperature" type="number" step="0.1" value="18" inputmode="decimal" />
+                </label>
+                <label class="field compact">
+                  <span>Unit</span>
+                  <select id="raceTemperatureUnit">
+                    <option value="c">C</option>
+                    <option value="f">F</option>
+                  </select>
+                </label>
+                <label class="field">
+                  <span>Humidity %</span>
+                  <input id="raceHumidity" type="number" min="0" max="100" step="1" value="60" inputmode="numeric" />
+                </label>
+              </div>
+
+              <div class="profile-grid">
+                <label class="field">
+                  <span>Race profile distance</span>
+                  <input id="raceProfileDistance" type="number" min="0.1" step="0.1" value="5" inputmode="decimal" />
+                </label>
+                <label class="field compact">
+                  <span>Unit</span>
+                  <select id="raceProfileDistanceUnit">
+                    <option value="km">km</option>
+                    <option value="mi">mile</option>
+                  </select>
+                </label>
+                <label class="field">
+                  <span>Elevation gain</span>
+                  <input id="raceElevationGain" type="number" min="0" step="1" value="0" inputmode="numeric" />
+                </label>
+                <label class="field">
+                  <span>Elevation loss</span>
+                  <input id="raceElevationLoss" type="number" min="0" step="1" value="0" inputmode="numeric" />
+                </label>
+                <label class="field compact">
+                  <span>Elev. unit</span>
+                  <select id="raceElevationUnit">
+                    <option value="m">m</option>
+                    <option value="ft">ft</option>
+                  </select>
+                </label>
+              </div>
+            </section>
+
+            <section class="settings-group">
+              <div class="group-heading">
+                <p class="eyebrow">Model</p>
+                <h2>Threshold</h2>
+              </div>
+
               <label class="field">
-                <span>Second custom distance</span>
-                <input id="secondCustomDistanceValue" type="number" min="0.1" step="0.01" value="8" />
-              </label>
-              <label class="field compact">
-                <span>Unit</span>
-                <select id="secondCustomDistanceUnit">
-                  <option value="km">km</option>
-                  <option value="mi">mi</option>
+                <span>Method</span>
+                <select id="thresholdMethod">
+                  <option value="blend">Blend valid methods</option>
+                  <option value="riegel">Riegel one-hour</option>
+                  <option value="vdot">VDOT equivalent</option>
+                  <option value="critical">Critical speed</option>
                 </select>
               </label>
-            </div>
 
-            <div class="form-section">
-              <p class="eyebrow">Conditions</p>
-              <h2>Weather and elevation</h2>
-            </div>
-
-            <div class="condition-grid">
               <label class="field">
-                <span>Temperature</span>
-                <input id="temperature" type="number" step="0.1" value="18" inputmode="decimal" />
-              </label>
-              <label class="field compact">
-                <span>Unit</span>
-                <select id="temperatureUnit">
-                  <option value="c">C</option>
-                  <option value="f">F</option>
+                <span>Bias</span>
+                <select id="model">
+                  <option value="balanced">Balanced threshold</option>
+                  <option value="conservative">Conservative</option>
+                  <option value="aggressive">Aggressive</option>
                 </select>
               </label>
-              <label class="field">
-                <span>Humidity %</span>
-                <input id="humidity" type="number" min="0" max="100" step="1" value="60" inputmode="numeric" />
-              </label>
-            </div>
 
-            <div class="profile-grid">
-              <label class="field">
-                <span>Profile distance</span>
-                <input id="profileDistance" type="number" min="0.1" step="0.1" value="5" inputmode="decimal" />
+              <label class="check-row">
+                <input id="useSecondEffort" type="checkbox" />
+                <span>Second race or time trial</span>
               </label>
-              <label class="field compact">
-                <span>Unit</span>
-                <select id="profileDistanceUnit">
-                  <option value="km">km</option>
-                  <option value="mi">mile</option>
-                </select>
-              </label>
-              <label class="field">
-                <span>Elevation gain</span>
-                <input id="elevationGain" type="number" min="0" step="1" value="0" inputmode="numeric" />
-              </label>
-              <label class="field">
-                <span>Elevation loss</span>
-                <input id="elevationLoss" type="number" min="0" step="1" value="0" inputmode="numeric" />
-              </label>
-              <label class="field compact">
-                <span>Elev. unit</span>
-                <select id="elevationUnit">
-                  <option value="m">m</option>
-                  <option value="ft">ft</option>
-                </select>
-              </label>
-            </div>
+
+              <div class="secondary-effort" id="secondaryEffort" hidden>
+                <label class="field">
+                  <span>Second distance</span>
+                  <select id="secondDistance">
+                    <option value="10">10K</option>
+                    <option value="5">5K</option>
+                    <option value="3">3K</option>
+                    <option value="1.609344">1 mile</option>
+                    <option value="21.0975">Half marathon</option>
+                    <option value="custom">Custom</option>
+                  </select>
+                </label>
+                <label class="field">
+                  <span>Hours</span>
+                  <input id="secondHours" type="number" min="0" step="1" value="0" inputmode="numeric" />
+                </label>
+                <label class="field">
+                  <span>Minutes</span>
+                  <input id="secondMinutes" type="number" min="0" step="1" value="42" inputmode="numeric" />
+                </label>
+                <label class="field">
+                  <span>Seconds</span>
+                  <input id="secondSeconds" type="number" min="0" step="1" value="0" inputmode="numeric" />
+                </label>
+              </div>
+
+              <div class="custom-distance" id="secondCustomDistance" hidden>
+                <label class="field">
+                  <span>Second custom distance</span>
+                  <input id="secondCustomDistanceValue" type="number" min="0.1" step="0.01" value="8" />
+                </label>
+                <label class="field compact">
+                  <span>Unit</span>
+                  <select id="secondCustomDistanceUnit">
+                    <option value="km">km</option>
+                    <option value="mi">mi</option>
+                  </select>
+                </label>
+              </div>
+            </section>
+
+            <section class="settings-group">
+              <div class="group-heading">
+                <p class="eyebrow">Training / Future</p>
+                <h2>Weather and Route</h2>
+              </div>
+
+              <div class="condition-grid">
+                <label class="field">
+                  <span>Temperature</span>
+                  <input id="temperature" type="number" step="0.1" value="18" inputmode="decimal" />
+                </label>
+                <label class="field compact">
+                  <span>Unit</span>
+                  <select id="temperatureUnit">
+                    <option value="c">C</option>
+                    <option value="f">F</option>
+                  </select>
+                </label>
+                <label class="field">
+                  <span>Humidity %</span>
+                  <input id="humidity" type="number" min="0" max="100" step="1" value="60" inputmode="numeric" />
+                </label>
+              </div>
+
+              <div class="profile-grid">
+                <label class="field">
+                  <span>Profile distance</span>
+                  <input id="profileDistance" type="number" min="0.1" step="0.1" value="5" inputmode="decimal" />
+                </label>
+                <label class="field compact">
+                  <span>Unit</span>
+                  <select id="profileDistanceUnit">
+                    <option value="km">km</option>
+                    <option value="mi">mile</option>
+                  </select>
+                </label>
+                <label class="field">
+                  <span>Elevation gain</span>
+                  <input id="elevationGain" type="number" min="0" step="1" value="0" inputmode="numeric" />
+                </label>
+                <label class="field">
+                  <span>Elevation loss</span>
+                  <input id="elevationLoss" type="number" min="0" step="1" value="0" inputmode="numeric" />
+                </label>
+                <label class="field compact">
+                  <span>Elev. unit</span>
+                  <select id="elevationUnit">
+                    <option value="m">m</option>
+                    <option value="ft">ft</option>
+                  </select>
+                </label>
+              </div>
+            </section>
           </form>
+        </aside>
 
-          <p class="fine-print">
-            Pure threshold can use Riegel, VDOT, Critical Speed, or a blended estimate. Critical Speed needs two maximal performances; weather and elevation then adjust that pure physiological pace.
-          </p>
-        </div>
+        <section class="results-column" aria-label="Results">
+          <section class="result-stage">
+            <div class="stage-content">
+              <div class="result-header">
+                <div>
+                  <p class="eyebrow">Training / future LT2</p>
+                  <output id="thresholdPace" class="main-result">4:15 / km</output>
+                </div>
+                <div class="confidence" id="confidence">Good input</div>
+              </div>
 
-        <div class="panel result-panel">
-          <canvas id="paceCanvas" width="900" height="360" aria-hidden="true"></canvas>
-
-          <div class="result-header">
-            <div>
-              <p class="eyebrow">Actual adjusted LT2 pace</p>
-              <output id="thresholdPace" class="main-result">4:15 / km</output>
+              <div class="training-band">
+                <div>
+                  <p class="eyebrow">Sub-threshold</p>
+                  <h2>Adjusted training band</h2>
+                </div>
+                <output id="trainingBand">4:18-4:23 / km</output>
+              </div>
             </div>
-            <div class="confidence" id="confidence">Good input</div>
-          </div>
+          </section>
 
-          <div class="metrics">
+          <section class="curve-card" aria-label="Projected race curve">
+            <div class="section-title">
+              <div>
+                <p class="eyebrow">Race curve</p>
+                <h2>Projected pace context</h2>
+              </div>
+            </div>
+            <canvas id="paceCanvas" width="900" height="360" aria-hidden="true"></canvas>
+          </section>
+
+          <section class="quick-stats">
             <div>
-              <span>Pure LT2</span>
+              <span>Ideal LT2</span>
               <strong id="pureThreshold">4:15 / km</strong>
             </div>
             <div>
-              <span>Actual per mile</span>
+              <span>Race-day LT2</span>
+              <strong id="raceThreshold">4:15 / km</strong>
+            </div>
+            <div>
+              <span>Per mile</span>
               <strong id="thresholdMile">6:50 / mi</strong>
             </div>
             <div>
-              <span>Weather effect</span>
+              <span>Training weather</span>
               <strong id="weatherEffect">+0.9%</strong>
             </div>
             <div>
-              <span>Elevation effect</span>
+              <span>Training route</span>
               <strong id="elevationEffect">+0.0%</strong>
             </div>
-          </div>
+          </section>
 
-          <div class="training-band">
-            <div>
-              <p class="eyebrow">Actual training recommendation</p>
-              <h2>Adjusted sub-threshold band</h2>
+          <section class="apple-section">
+            <div class="section-title">
+              <p class="eyebrow">Summary</p>
+              <h2>Fitness and adjustment</h2>
             </div>
-            <output id="trainingBand">4:18-4:23 / km</output>
-          </div>
+            <div class="comparison-grid">
+              <div>
+                <span>Ideal sub-threshold</span>
+                <strong id="pureTrainingBand">4:18-4:23 / km</strong>
+              </div>
+              <div>
+                <span>Race-day adjustment</span>
+                <strong id="raceAdjustment">+0.9%</strong>
+              </div>
+              <div>
+                <span>Race equivalent</span>
+                <strong id="raceSummary">5K in 20:00</strong>
+              </div>
+              <div>
+                <span>Training adjustment</span>
+                <strong id="totalAdjustment">+0.9%</strong>
+              </div>
+              <div>
+                <span>Ideal 60-min distance</span>
+                <strong id="hourDistance">14.1 km</strong>
+              </div>
+            </div>
+          </section>
 
-          <div class="comparison-grid">
-            <div>
-              <span>Pure sub-threshold band</span>
-              <strong id="pureTrainingBand">4:18-4:23 / km</strong>
+          <section class="apple-section">
+            <div class="section-title">
+              <p class="eyebrow">Model Check</p>
+              <h2>Estimate spread</h2>
             </div>
-            <div>
-              <span>60-min distance</span>
-              <strong id="hourDistance">14.1 km</strong>
+            <div class="model-grid">
+              <div>
+                <span>Riegel</span>
+                <strong id="riegelEstimate">4:15 / km</strong>
+              </div>
+              <div>
+                <span>VDOT</span>
+                <strong id="vdotEstimate">4:13 / km</strong>
+              </div>
+              <div>
+                <span>Critical speed</span>
+                <strong id="criticalEstimate">Add second effort</strong>
+              </div>
+              <div>
+                <span>Model spread</span>
+                <strong id="modelSpread">0.8%</strong>
+              </div>
             </div>
-            <div>
-              <span>Race equivalent</span>
-              <strong id="raceSummary">5K in 20:00</strong>
-            </div>
-            <div>
-              <span>Total adjustment</span>
-              <strong id="totalAdjustment">+0.9%</strong>
-            </div>
-          </div>
+          </section>
 
-          <div class="model-grid">
-            <div>
-              <span>Riegel</span>
-              <strong id="riegelEstimate">4:15 / km</strong>
-            </div>
-            <div>
-              <span>VDOT</span>
-              <strong id="vdotEstimate">4:13 / km</strong>
-            </div>
-            <div>
-              <span>Critical speed</span>
-              <strong id="criticalEstimate">Add second effort</strong>
-            </div>
-            <div>
-              <span>Model spread</span>
-              <strong id="modelSpread">0.8%</strong>
-            </div>
-          </div>
-
-          <div class="interval-section">
-            <div>
-              <p class="eyebrow">Interval prescription</p>
-              <h2>Recommended pace ranges</h2>
+          <section class="apple-section interval-section">
+            <div class="section-title">
+              <p class="eyebrow">Intervals</p>
+              <h2>Recommended ranges</h2>
             </div>
 
             <div class="interval-groups">
@@ -305,22 +406,22 @@
                 <div class="interval-table" id="distanceIntervalTable"></div>
               </div>
             </div>
-          </div>
+          </section>
 
-          <div class="race-section">
-            <div>
-              <p class="eyebrow">Race projection</p>
-              <h2>Predicted race pace ranges</h2>
+          <section class="apple-section race-section">
+            <div class="section-title">
+              <p class="eyebrow">Race Projection</p>
+              <h2>Predicted pace ranges</h2>
             </div>
             <div class="race-table" id="racePredictionTable"></div>
-          </div>
+          </section>
 
-          <div class="notes">
+          <section class="note-panel">
             <p id="conditionNote">
-              Use pure threshold to track fitness. Use actual threshold when pacing a specific route or a hot, humid session.
+              Use ideal LT2 to track fitness. Use training/future LT2 when pacing a specific route, workout, or race day.
             </p>
-          </div>
-        </div>
+          </section>
+        </section>
       </section>
     </main>
 

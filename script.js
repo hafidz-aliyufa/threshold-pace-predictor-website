@@ -26,6 +26,14 @@ const elements = {
   secondHours: document.querySelector("#secondHours"),
   secondMinutes: document.querySelector("#secondMinutes"),
   secondSeconds: document.querySelector("#secondSeconds"),
+  raceTemperature: document.querySelector("#raceTemperature"),
+  raceTemperatureUnit: document.querySelector("#raceTemperatureUnit"),
+  raceHumidity: document.querySelector("#raceHumidity"),
+  raceProfileDistance: document.querySelector("#raceProfileDistance"),
+  raceProfileDistanceUnit: document.querySelector("#raceProfileDistanceUnit"),
+  raceElevationGain: document.querySelector("#raceElevationGain"),
+  raceElevationLoss: document.querySelector("#raceElevationLoss"),
+  raceElevationUnit: document.querySelector("#raceElevationUnit"),
   temperature: document.querySelector("#temperature"),
   temperatureUnit: document.querySelector("#temperatureUnit"),
   humidity: document.querySelector("#humidity"),
@@ -36,6 +44,7 @@ const elements = {
   elevationUnit: document.querySelector("#elevationUnit"),
   thresholdPace: document.querySelector("#thresholdPace"),
   pureThreshold: document.querySelector("#pureThreshold"),
+  raceThreshold: document.querySelector("#raceThreshold"),
   thresholdMile: document.querySelector("#thresholdMile"),
   hourDistance: document.querySelector("#hourDistance"),
   raceSummary: document.querySelector("#raceSummary"),
@@ -44,6 +53,7 @@ const elements = {
   weatherEffect: document.querySelector("#weatherEffect"),
   elevationEffect: document.querySelector("#elevationEffect"),
   totalAdjustment: document.querySelector("#totalAdjustment"),
+  raceAdjustment: document.querySelector("#raceAdjustment"),
   conditionNote: document.querySelector("#conditionNote"),
   riegelEstimate: document.querySelector("#riegelEstimate"),
   vdotEstimate: document.querySelector("#vdotEstimate"),
@@ -63,6 +73,7 @@ const modelAdjustments = {
 };
 
 let profileDistanceTouched = false;
+let raceProfileDistanceTouched = false;
 
 function numberValue(input) {
   return Number.parseFloat(input.value) || 0;
@@ -116,30 +127,71 @@ function getSecondRaceSeconds() {
   );
 }
 
-function getTemperatureC() {
-  const temperature = numberValue(elements.temperature);
-  return elements.temperatureUnit.value === "f" ? (temperature - 32) * (5 / 9) : temperature;
+function getTemperatureCFrom(temperatureInput, unitInput) {
+  const temperature = numberValue(temperatureInput);
+  return unitInput.value === "f" ? (temperature - 32) * (5 / 9) : temperature;
 }
 
-function getElevationProfile() {
-  const distanceRaw = Math.max(numberValue(elements.profileDistance), 0.1);
-  const distanceKm = elements.profileDistanceUnit.value === "mi" ? distanceRaw * KM_PER_MILE : distanceRaw;
-  const unitMultiplier = elements.elevationUnit.value === "ft" ? 0.3048 : 1;
+function getTemperatureC() {
+  return getTemperatureCFrom(elements.temperature, elements.temperatureUnit);
+}
+
+function getRaceTemperatureC() {
+  return getTemperatureCFrom(elements.raceTemperature, elements.raceTemperatureUnit);
+}
+
+function getElevationProfileFrom(distanceInput, distanceUnitInput, gainInput, lossInput, elevationUnitInput) {
+  const distanceRaw = Math.max(numberValue(distanceInput), 0.1);
+  const distanceKm = distanceUnitInput.value === "mi" ? distanceRaw * KM_PER_MILE : distanceRaw;
+  const unitMultiplier = elevationUnitInput.value === "ft" ? 0.3048 : 1;
 
   return {
     distanceKm,
-    gainMeters: Math.max(numberValue(elements.elevationGain), 0) * unitMultiplier,
-    lossMeters: Math.max(numberValue(elements.elevationLoss), 0) * unitMultiplier,
+    gainMeters: Math.max(numberValue(gainInput), 0) * unitMultiplier,
+    lossMeters: Math.max(numberValue(lossInput), 0) * unitMultiplier,
   };
 }
 
-function syncProfileDistance(distanceKm) {
-  if (profileDistanceTouched) {
+function getElevationProfile() {
+  return getElevationProfileFrom(
+    elements.profileDistance,
+    elements.profileDistanceUnit,
+    elements.elevationGain,
+    elements.elevationLoss,
+    elements.elevationUnit,
+  );
+}
+
+function getRaceElevationProfile() {
+  return getElevationProfileFrom(
+    elements.raceProfileDistance,
+    elements.raceProfileDistanceUnit,
+    elements.raceElevationGain,
+    elements.raceElevationLoss,
+    elements.raceElevationUnit,
+  );
+}
+
+function syncDistanceInput(distanceKm, input, unitInput, isTouched) {
+  if (isTouched) {
     return;
   }
 
-  const displayDistance = elements.profileDistanceUnit.value === "mi" ? distanceKm / KM_PER_MILE : distanceKm;
-  elements.profileDistance.value = displayDistance.toFixed(displayDistance >= 10 ? 1 : 2).replace(/\.?0+$/, "");
+  const displayDistance = unitInput.value === "mi" ? distanceKm / KM_PER_MILE : distanceKm;
+  input.value = displayDistance.toFixed(displayDistance >= 10 ? 1 : 2).replace(/\.?0+$/, "");
+}
+
+function syncProfileDistance(distanceKm) {
+  syncDistanceInput(distanceKm, elements.profileDistance, elements.profileDistanceUnit, profileDistanceTouched);
+}
+
+function syncRaceProfileDistance(distanceKm) {
+  syncDistanceInput(
+    distanceKm,
+    elements.raceProfileDistance,
+    elements.raceProfileDistanceUnit,
+    raceProfileDistanceTouched,
+  );
 }
 
 function formatClock(totalSeconds) {
@@ -426,8 +478,8 @@ function renderRacePredictions(container, predictions) {
       (race) => `
         <div class="race-row">
           <div><span>Race</span><strong>${race.label}</strong></div>
-          <div><span>Actual pace range</span><strong>${formatPace(race.lowPace, "km").replace(" / km", "")}-${formatPace(race.highPace, "km")}</strong></div>
-          <div><span>Pure pace</span><strong>${formatPace(race.purePace, "km")}</strong></div>
+          <div><span>Future pace range</span><strong>${formatPace(race.lowPace, "km").replace(" / km", "")}-${formatPace(race.highPace, "km")}</strong></div>
+          <div><span>Ideal pace</span><strong>${formatPace(race.purePace, "km")}</strong></div>
           <div><span>Finish range</span><strong>${formatClock(race.lowTime)}-${formatClock(race.highTime)}</strong></div>
         </div>
       `,
@@ -478,6 +530,19 @@ function getConditionAdjustment() {
   };
 }
 
+function getRaceConditionAdjustment() {
+  const weather = getWeatherAdjustment(getRaceTemperatureC(), numberValue(elements.raceHumidity));
+  const elevation = getElevationAdjustment(getRaceElevationProfile());
+  const factor = weather.factor * elevation.factor;
+
+  return {
+    weather,
+    elevation,
+    factor,
+    percent: (factor - 1) * 100,
+  };
+}
+
 function getConfidence(distanceKm, raceSeconds) {
   const raceMinutes = raceSeconds / 60;
   if (distanceKm < 1.5 || raceMinutes < 4) {
@@ -497,21 +562,26 @@ function formatPercent(value) {
   return `${sign}${value.toFixed(1)}%`;
 }
 
-function getConditionNote(adjustment) {
-  if (adjustment.percent < 0.3) {
-    return "Conditions are close to neutral. The pure threshold and actual threshold should be almost interchangeable today.";
+function getConditionNote(targetAdjustment, raceAdjustment) {
+  const raceText =
+    Math.abs(raceAdjustment.percent) < 0.3
+      ? "The race performance was close to neutral, so race-day LT2 and ideal LT2 are nearly the same."
+      : `The race performance is normalized by removing a ${formatPercent(raceAdjustment.percent)} race-day condition effect.`;
+
+  if (Math.abs(targetAdjustment.percent) < 0.3) {
+    return `${raceText} Training or future conditions are close to neutral today.`;
   }
-  if (adjustment.weather.percent > adjustment.elevation.percent && adjustment.weather.percent > 2) {
-    return "Weather is the main limiter. Keep the actual threshold target, and let heart rate or breathing cap the effort if heat builds late.";
+  if (targetAdjustment.weather.percent > targetAdjustment.elevation.percent && targetAdjustment.weather.percent > 2) {
+    return `${raceText} Training/future weather is the main limiter, so use the adjusted target and let breathing cap the effort if heat builds late.`;
   }
-  if (adjustment.elevation.percent > 2) {
-    return "Elevation is the main limiter. Use the adjusted pace for the route, but judge climbs by effort rather than forcing even splits.";
+  if (targetAdjustment.elevation.percent > 2) {
+    return `${raceText} Training/future route elevation is the main limiter, so judge climbs by effort rather than forcing even splits.`;
   }
-  return "Use pure threshold to track fitness. Use actual threshold when pacing this specific route or weather condition.";
+  return `${raceText} Use ideal LT2 to track fitness, and training/future LT2 for today or the next race.`;
 }
 
-function getMethodNote(threshold, adjustment) {
-  const baseNote = getConditionNote(adjustment);
+function getMethodNote(threshold, raceAdjustment, targetAdjustment) {
+  const baseNote = getConditionNote(targetAdjustment, raceAdjustment);
   const spread = threshold.spreadPercent;
   if (elements.thresholdMethod.value === "critical" && !threshold.critical) {
     return `Critical Speed needs two all-out efforts with different distances. The app is temporarily using the Riegel/VDOT blend. ${baseNote}`;
@@ -528,7 +598,7 @@ function getMethodNote(threshold, adjustment) {
   return `${threshold.method} is selected. ${baseNote}`;
 }
 
-function drawChart(actualSecondsPerKm, raceSeconds, distanceKm, pureSecondsPerKm) {
+function drawChart(actualSecondsPerKm, raceSeconds, distanceKm, pureSecondsPerKm, raceSecondsPerKm) {
   const canvas = elements.canvas;
   const ctx = canvas.getContext("2d");
   const pixelRatio = window.devicePixelRatio || 1;
@@ -564,10 +634,10 @@ function drawChart(actualSecondsPerKm, raceSeconds, distanceKm, pureSecondsPerKm
   }
 
   const distances = [3, 5, 10, 15, 21.0975, 42.195];
-  const sourcePace = raceSeconds / distanceKm;
-  const paces = distances.map((d) => sourcePace * (d / distanceKm) ** (RIEGEL_EXPONENT - 1));
-  const minPace = Math.min(...paces, pureSecondsPerKm, actualSecondsPerKm) * 0.96;
-  const maxPace = Math.max(...paces, pureSecondsPerKm, actualSecondsPerKm) * 1.05;
+  const idealHourDistance = 3600 / pureSecondsPerKm;
+  const paces = distances.map((d) => (3600 * (d / idealHourDistance) ** RIEGEL_EXPONENT) / d);
+  const minPace = Math.min(...paces, pureSecondsPerKm, raceSecondsPerKm, actualSecondsPerKm) * 0.96;
+  const maxPace = Math.max(...paces, pureSecondsPerKm, raceSecondsPerKm, actualSecondsPerKm) * 1.05;
 
   function xForIndex(index) {
     return padX + (chartWidth * index) / (distances.length - 1);
@@ -593,12 +663,14 @@ function drawChart(actualSecondsPerKm, raceSeconds, distanceKm, pureSecondsPerKm
   ctx.lineJoin = "round";
   ctx.stroke();
 
-  const hourDistance = distanceKm * (3600 / raceSeconds) ** (1 / RIEGEL_EXPONENT);
   const nearestIndex = distances.reduce((bestIndex, distance, index) => {
-    return Math.abs(distance - hourDistance) < Math.abs(distances[bestIndex] - hourDistance) ? index : bestIndex;
+    return Math.abs(distance - idealHourDistance) < Math.abs(distances[bestIndex] - idealHourDistance)
+      ? index
+      : bestIndex;
   }, 0);
   const markerX = xForIndex(nearestIndex);
   const pureMarkerY = yForPace(pureSecondsPerKm);
+  const raceMarkerY = yForPace(raceSecondsPerKm);
   const actualMarkerY = yForPace(actualSecondsPerKm);
 
   ctx.strokeStyle = "rgba(255, 59, 48, 0.48)";
@@ -606,6 +678,7 @@ function drawChart(actualSecondsPerKm, raceSeconds, distanceKm, pureSecondsPerKm
   ctx.setLineDash([5, 5]);
   ctx.beginPath();
   ctx.moveTo(markerX, pureMarkerY);
+  ctx.lineTo(markerX, raceMarkerY);
   ctx.lineTo(markerX, actualMarkerY);
   ctx.stroke();
   ctx.setLineDash([]);
@@ -615,12 +688,17 @@ function drawChart(actualSecondsPerKm, raceSeconds, distanceKm, pureSecondsPerKm
   ctx.arc(markerX, pureMarkerY, 6, 0, Math.PI * 2);
   ctx.fill();
 
+  ctx.fillStyle = "#0071e3";
+  ctx.beginPath();
+  ctx.arc(markerX, raceMarkerY, 6, 0, Math.PI * 2);
+  ctx.fill();
+
   ctx.fillStyle = "#ff3b30";
   ctx.beginPath();
   ctx.arc(markerX, actualMarkerY, 7, 0, Math.PI * 2);
   ctx.fill();
 
-  ctx.font = "700 12px Inter, system-ui, sans-serif";
+  ctx.font = "700 12px -apple-system, BlinkMacSystemFont, system-ui, sans-serif";
   ctx.fillStyle = "rgba(21, 23, 19, 0.65)";
   ctx.textAlign = "center";
   distances.forEach((distance, index) => {
@@ -630,18 +708,21 @@ function drawChart(actualSecondsPerKm, raceSeconds, distanceKm, pureSecondsPerKm
 
   ctx.textAlign = "left";
   ctx.fillStyle = "#151713";
-  ctx.font = "800 14px Inter, system-ui, sans-serif";
-  ctx.fillText("Pure curve + actual condition marker", padX, padY - 10);
+  ctx.font = "800 14px -apple-system, BlinkMacSystemFont, system-ui, sans-serif";
+  ctx.fillText("Ideal curve with race-day and future-condition markers", padX, padY - 10);
 }
 
 function updateInterface() {
   const mode = getInputMode();
   const distanceKm = getDistanceKm();
+  syncRaceProfileDistance(distanceKm);
   syncProfileDistance(distanceKm);
   const raceSeconds = getRaceSeconds(distanceKm);
   const threshold = predictThreshold(distanceKm, raceSeconds);
+  const raceAdjustment = getRaceConditionAdjustment();
   const adjustment = getConditionAdjustment();
-  const pureSecondsPerKm = threshold.secondsPerKm;
+  const raceSecondsPerKm = threshold.secondsPerKm;
+  const pureSecondsPerKm = raceSecondsPerKm / raceAdjustment.factor;
   const actualSecondsPerKm = pureSecondsPerKm * adjustment.factor;
   const pureBand = getTrainingBand(pureSecondsPerKm);
   const actualBand = getTrainingBand(actualSecondsPerKm);
@@ -654,19 +735,27 @@ function updateInterface() {
 
   elements.thresholdPace.textContent = formatPace(actualSecondsPerKm, "km");
   elements.pureThreshold.textContent = formatPace(pureSecondsPerKm, "km");
+  elements.raceThreshold.textContent = formatPace(raceSecondsPerKm, "km");
   elements.thresholdMile.textContent = formatPace(actualSecondsPerKm, "mi");
-  elements.hourDistance.textContent = `${threshold.hourDistanceKm.toFixed(1)} km`;
+  elements.hourDistance.textContent = `${(3600 / pureSecondsPerKm).toFixed(1)} km`;
   elements.raceSummary.textContent = `${formatDistance(distanceKm)} in ${formatClock(raceSeconds)}`;
   elements.trainingBand.textContent = `${formatPace(actualBand.low, "km").replace(" / km", "")}-${formatPace(actualBand.high, "km")}`;
   elements.pureTrainingBand.textContent = `${formatPace(pureBand.low, "km").replace(" / km", "")}-${formatPace(pureBand.high, "km")}`;
   elements.weatherEffect.textContent = formatPercent(adjustment.weather.percent);
   elements.elevationEffect.textContent = formatPercent(adjustment.elevation.percent);
   elements.totalAdjustment.textContent = formatPercent(adjustment.percent);
-  elements.conditionNote.textContent = getMethodNote(threshold, adjustment);
-  elements.riegelEstimate.textContent = formatPace(threshold.riegel.secondsPerKm, "km");
-  elements.vdotEstimate.textContent = formatPace(threshold.vdot.secondsPerKm, "km");
+  elements.raceAdjustment.textContent = formatPercent(raceAdjustment.percent);
+  elements.conditionNote.textContent = getMethodNote(threshold, raceAdjustment, adjustment);
+  elements.riegelEstimate.textContent = formatPace(
+    (threshold.riegel.secondsPerKm * modelAdjustments[elements.model.value]) / raceAdjustment.factor,
+    "km",
+  );
+  elements.vdotEstimate.textContent = formatPace(
+    (threshold.vdot.secondsPerKm * modelAdjustments[elements.model.value]) / raceAdjustment.factor,
+    "km",
+  );
   elements.criticalEstimate.textContent = threshold.critical
-    ? formatPace(threshold.critical.secondsPerKm, "km")
+    ? formatPace((threshold.critical.secondsPerKm * modelAdjustments[elements.model.value]) / raceAdjustment.factor, "km")
     : "Add second effort";
   elements.modelSpread.textContent = formatPercent(threshold.spreadPercent).replace("+", "");
   const intervalRows = getIntervalRows(actualSecondsPerKm);
@@ -681,7 +770,7 @@ function updateInterface() {
       ? "Needs second effort"
       : getConfidence(distanceKm, raceSeconds);
 
-  drawChart(actualSecondsPerKm, raceSeconds, distanceKm, pureSecondsPerKm);
+  drawChart(actualSecondsPerKm, raceSeconds, distanceKm, pureSecondsPerKm, raceSecondsPerKm);
 }
 
 elements.form.addEventListener("input", updateInterface);
@@ -691,6 +780,12 @@ elements.profileDistance.addEventListener("input", () => {
 });
 elements.profileDistanceUnit.addEventListener("change", () => {
   profileDistanceTouched = true;
+});
+elements.raceProfileDistance.addEventListener("input", () => {
+  raceProfileDistanceTouched = true;
+});
+elements.raceProfileDistanceUnit.addEventListener("change", () => {
+  raceProfileDistanceTouched = true;
 });
 window.addEventListener("resize", updateInterface);
 
