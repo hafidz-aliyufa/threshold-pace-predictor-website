@@ -1,16 +1,17 @@
 :root {
   color-scheme: light;
-  --bg: #f6f4ee;
-  --ink: #151713;
-  --muted: #667067;
-  --line: #d8d6cb;
-  --surface: #fffdf7;
-  --surface-strong: #f0efe7;
-  --green: #1f7a58;
-  --teal: #19727b;
-  --rust: #bd5935;
-  --gold: #d99e2b;
-  --shadow: 0 22px 60px rgba(25, 31, 24, 0.12);
+  --bg: #f5f5f7;
+  --ink: #1d1d1f;
+  --muted: #6e6e73;
+  --line: #d2d2d7;
+  --surface: #ffffff;
+  --surface-strong: #fbfbfd;
+  --blue: #0071e3;
+  --blue-soft: #e8f2ff;
+  --green: #34c759;
+  --orange: #ff9f0a;
+  --red: #ff3b30;
+  --shadow: 0 18px 48px rgba(0, 0, 0, 0.08);
 }
 
 * {
@@ -21,12 +22,11 @@ body {
   margin: 0;
   min-height: 100vh;
   font-family:
-    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI",
     sans-serif;
   color: var(--ink);
   background:
-    linear-gradient(115deg, rgba(31, 122, 88, 0.08), transparent 36%),
-    linear-gradient(245deg, rgba(189, 89, 53, 0.11), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(245, 245, 247, 0.72) 38%),
     var(--bg);
 }
 
@@ -47,16 +47,17 @@ select {
 
 .workspace {
   display: grid;
-  grid-template-columns: minmax(310px, 0.9fr) minmax(380px, 1.1fr);
-  gap: 18px;
+  grid-template-columns: minmax(320px, 0.88fr) minmax(420px, 1.12fr);
+  gap: 20px;
 }
 
 .panel {
   min-width: 0;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: rgba(255, 253, 247, 0.92);
+  background: rgba(255, 255, 255, 0.86);
   box-shadow: var(--shadow);
+  backdrop-filter: blur(18px);
 }
 
 .input-panel {
@@ -72,7 +73,7 @@ select {
   padding: 30px;
   min-height: 640px;
   background:
-    linear-gradient(180deg, rgba(255, 253, 247, 0.36), var(--surface) 54%),
+    linear-gradient(180deg, rgba(232, 242, 255, 0.72), var(--surface) 48%),
     var(--surface);
 }
 
@@ -97,16 +98,16 @@ select {
   place-items: center;
   border-radius: 6px;
   color: white;
-  background: linear-gradient(135deg, var(--green), var(--teal));
-  font-weight: 800;
+  background: linear-gradient(135deg, #0099ff, var(--blue));
+  font-weight: 700;
   letter-spacing: 0;
 }
 
 .eyebrow {
   margin: 0 0 6px;
   color: var(--muted);
-  font-size: 0.76rem;
-  font-weight: 800;
+  font-size: 0.74rem;
+  font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -120,10 +121,12 @@ h2 {
 h1 {
   font-size: clamp(1.8rem, 3vw, 2.55rem);
   line-height: 1.02;
+  font-weight: 760;
 }
 
 h2 {
   font-size: 1.1rem;
+  font-weight: 720;
 }
 
 .form-grid {
@@ -150,7 +153,7 @@ h2 {
 .segmented legend {
   color: var(--muted);
   font-size: 0.86rem;
-  font-weight: 700;
+  font-weight: 650;
 }
 
 .field input,
@@ -161,13 +164,13 @@ h2 {
   border-radius: 6px;
   padding: 0 12px;
   color: var(--ink);
-  background: white;
+  background: #fbfbfd;
 }
 
 .field input:focus,
 .field select:focus {
-  outline: 3px solid rgba(31, 122, 88, 0.18);
-  border-color: var(--green);
+  outline: 3px solid rgba(0, 113, 227, 0.18);
+  border-color: var(--blue);
 }
 
 .custom-distance,
@@ -231,14 +234,14 @@ h2 {
   min-height: 44px;
   border: 1px solid var(--line);
   border-radius: 6px;
-  background: white;
-  font-weight: 800;
+  background: #fbfbfd;
+  font-weight: 700;
 }
 
 .segmented input:checked + span {
-  border-color: rgba(31, 122, 88, 0.42);
-  color: var(--green);
-  background: rgba(31, 122, 88, 0.1);
+  border-color: rgba(0, 113, 227, 0.42);
+  color: var(--blue);
+  background: var(--blue-soft);
 }
 
 .check-row {
@@ -253,7 +256,7 @@ h2 {
 .check-row input {
   width: 18px;
   height: 18px;
-  accent-color: var(--green);
+  accent-color: var(--blue);
 }
 
 .fine-print,
@@ -286,20 +289,21 @@ h2 {
 .main-result {
   display: block;
   font-size: clamp(3rem, 8vw, 5.8rem);
-  font-weight: 900;
+  font-weight: 780;
   line-height: 0.92;
   letter-spacing: 0;
+  color: var(--blue);
 }
 
 .confidence {
   flex: 0 0 auto;
-  border: 1px solid rgba(25, 114, 123, 0.28);
+  border: 1px solid rgba(0, 113, 227, 0.2);
   border-radius: 999px;
   padding: 9px 12px;
-  color: var(--teal);
-  background: rgba(25, 114, 123, 0.1);
+  color: var(--blue);
+  background: rgba(0, 113, 227, 0.08);
   font-size: 0.84rem;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .metrics {
@@ -315,7 +319,7 @@ h2 {
   border: 1px solid var(--line);
   border-radius: 8px;
   padding: 14px;
-  background: rgba(255, 255, 255, 0.72);
+  background: rgba(251, 251, 253, 0.82);
 }
 
 .metrics span,
@@ -325,7 +329,7 @@ h2 {
   margin-bottom: 10px;
   color: var(--muted);
   font-size: 0.78rem;
-  font-weight: 800;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.07em;
 }
@@ -335,19 +339,20 @@ h2 {
 .model-grid strong {
   font-size: clamp(1rem, 2vw, 1.35rem);
   letter-spacing: 0;
+  font-weight: 720;
 }
 
 .training-band {
-  border: 1px solid rgba(189, 89, 53, 0.24);
+  border: 1px solid rgba(0, 113, 227, 0.16);
   border-radius: 8px;
   padding: 18px;
-  background: rgba(189, 89, 53, 0.09);
+  background: rgba(0, 113, 227, 0.07);
 }
 
 .training-band output {
   font-size: clamp(1.15rem, 2.6vw, 1.85rem);
-  font-weight: 900;
-  color: var(--rust);
+  font-weight: 760;
+  color: var(--blue);
   text-align: right;
 }
 
@@ -366,25 +371,25 @@ h2 {
 .comparison-grid div,
 .model-grid div {
   min-height: 78px;
-  background: rgba(240, 239, 231, 0.62);
+  background: rgba(251, 251, 253, 0.74);
 }
 
 .interval-section {
   display: grid;
   gap: 14px;
-  border: 1px solid rgba(31, 122, 88, 0.2);
+  border: 1px solid rgba(52, 199, 89, 0.2);
   border-radius: 8px;
   padding: 18px;
-  background: rgba(31, 122, 88, 0.07);
+  background: rgba(52, 199, 89, 0.07);
 }
 
 .race-section {
   display: grid;
   gap: 14px;
-  border: 1px solid rgba(25, 114, 123, 0.2);
+  border: 1px solid rgba(255, 159, 10, 0.24);
   border-radius: 8px;
   padding: 18px;
-  background: rgba(25, 114, 123, 0.07);
+  background: rgba(255, 159, 10, 0.08);
 }
 
 .interval-groups {
@@ -397,6 +402,7 @@ h2 {
   margin: 0 0 8px;
   font-size: 0.95rem;
   letter-spacing: 0;
+  font-weight: 720;
 }
 
 .interval-table {
@@ -416,10 +422,10 @@ h2 {
   gap: 8px;
   align-items: center;
   min-height: 56px;
-  border: 1px solid rgba(216, 214, 203, 0.9);
+  border: 1px solid rgba(210, 210, 215, 0.86);
   border-radius: 8px;
   padding: 10px;
-  background: rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.78);
 }
 
 .race-row {
@@ -430,7 +436,7 @@ h2 {
 .race-row span {
   color: var(--muted);
   font-size: 0.76rem;
-  font-weight: 800;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.07em;
 }
@@ -441,10 +447,11 @@ h2 {
   margin-top: 3px;
   font-size: 0.96rem;
   letter-spacing: 0;
+  font-weight: 700;
 }
 
 .notes {
-  border-left: 4px solid var(--gold);
+  border-left: 4px solid var(--orange);
   padding-left: 14px;
 }
 

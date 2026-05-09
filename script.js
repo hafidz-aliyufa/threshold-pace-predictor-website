@@ -542,9 +542,9 @@ function drawChart(actualSecondsPerKm, raceSeconds, distanceKm, pureSecondsPerKm
   ctx.clearRect(0, 0, width, height);
 
   const gradient = ctx.createLinearGradient(0, 0, width, height);
-  gradient.addColorStop(0, "rgba(31, 122, 88, 0.2)");
-  gradient.addColorStop(0.6, "rgba(217, 158, 43, 0.12)");
-  gradient.addColorStop(1, "rgba(189, 89, 53, 0.14)");
+  gradient.addColorStop(0, "rgba(0, 113, 227, 0.18)");
+  gradient.addColorStop(0.62, "rgba(255, 255, 255, 0.44)");
+  gradient.addColorStop(1, "rgba(255, 159, 10, 0.12)");
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, width, height);
 
@@ -587,7 +587,7 @@ function drawChart(actualSecondsPerKm, raceSeconds, distanceKm, pureSecondsPerKm
       ctx.lineTo(x, y);
     }
   });
-  ctx.strokeStyle = "#19727b";
+  ctx.strokeStyle = "#0071e3";
   ctx.lineWidth = 4;
   ctx.lineCap = "round";
   ctx.lineJoin = "round";
@@ -601,7 +601,7 @@ function drawChart(actualSecondsPerKm, raceSeconds, distanceKm, pureSecondsPerKm
   const pureMarkerY = yForPace(pureSecondsPerKm);
   const actualMarkerY = yForPace(actualSecondsPerKm);
 
-  ctx.strokeStyle = "rgba(189, 89, 53, 0.55)";
+  ctx.strokeStyle = "rgba(255, 59, 48, 0.48)";
   ctx.lineWidth = 2;
   ctx.setLineDash([5, 5]);
   ctx.beginPath();
@@ -610,12 +610,12 @@ function drawChart(actualSecondsPerKm, raceSeconds, distanceKm, pureSecondsPerKm
   ctx.stroke();
   ctx.setLineDash([]);
 
-  ctx.fillStyle = "#1f7a58";
+  ctx.fillStyle = "#34c759";
   ctx.beginPath();
   ctx.arc(markerX, pureMarkerY, 6, 0, Math.PI * 2);
   ctx.fill();
 
-  ctx.fillStyle = "#bd5935";
+  ctx.fillStyle = "#ff3b30";
   ctx.beginPath();
   ctx.arc(markerX, actualMarkerY, 7, 0, Math.PI * 2);
   ctx.fill();
