@@ -669,7 +669,7 @@ function getMethodNote(threshold, raceAdjustment, targetAdjustment) {
   return `${threshold.method} is selected. ${baseNote}`;
 }
 
-function drawChart(actualSecondsPerKm, raceSeconds, distanceKm, pureSecondsPerKm, raceSecondsPerKm) {
+function drawChart(actualSecondsPerKm, pureSecondsPerKm, raceSecondsPerKm) {
   const canvas = elements.canvas;
   const ctx = canvas.getContext("2d");
   const pixelRatio = window.devicePixelRatio || 1;
@@ -748,9 +748,8 @@ function drawChart(actualSecondsPerKm, raceSeconds, distanceKm, pureSecondsPerKm
   ctx.lineWidth = 2;
   ctx.setLineDash([5, 5]);
   ctx.beginPath();
-  ctx.moveTo(markerX, pureMarkerY);
-  ctx.lineTo(markerX, raceMarkerY);
-  ctx.lineTo(markerX, actualMarkerY);
+  ctx.moveTo(markerX, Math.min(pureMarkerY, raceMarkerY, actualMarkerY));
+  ctx.lineTo(markerX, Math.max(pureMarkerY, raceMarkerY, actualMarkerY));
   ctx.stroke();
   ctx.setLineDash([]);
 
@@ -841,7 +840,7 @@ function updateInterface() {
       ? "Needs second effort"
       : getConfidence(distanceKm, raceSeconds);
 
-  drawChart(actualSecondsPerKm, raceSeconds, distanceKm, pureSecondsPerKm, raceSecondsPerKm);
+  drawChart(actualSecondsPerKm, pureSecondsPerKm, raceSecondsPerKm);
 }
 
 elements.profileDistance.addEventListener("input", () => {

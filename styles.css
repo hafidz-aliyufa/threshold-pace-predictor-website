@@ -1,22 +1,30 @@
+/* === Variables ===================================== */
 :root {
   color-scheme: light;
-  --bg: #f5f5f7;
-  --ink: #1d1d1f;
-  --muted: #6e6e73;
-  --line: #d2d2d7;
-  --line-soft: #e8e8ed;
+  --bg: #f2f2f7;
+  --ink: #1c1c1e;
+  --muted: #8e8e93;
+  --line-soft: rgba(60, 60, 67, 0.18);
   --surface: #ffffff;
-  --surface-soft: #fbfbfd;
-  --blue: #0071e3;
-  --blue-soft: #eaf4ff;
+  --fill: rgba(118, 118, 128, 0.12);
+  --fill-2: rgba(118, 118, 128, 0.08);
+  --blue: #007aff;
+  --blue-tint: rgba(0, 122, 255, 0.1);
+  --blue-tint-2: rgba(0, 122, 255, 0.06);
+  --blue-mid: rgba(0, 122, 255, 0.18);
   --green: #34c759;
-  --orange: #ff9f0a;
+  --orange: #ff9500;
   --red: #ff3b30;
-  --shadow: 0 24px 70px rgba(0, 0, 0, 0.08);
-  --inner-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82);
+  --r-card: 16px;
+  --r-inner: 12px;
+  --r-ctrl: 10px;
+  --shadow: 0 1px 1px rgba(0, 0, 0, 0.04), 0 4px 16px rgba(0, 0, 0, 0.06);
 }
 
-* {
+/* === Reset ===================================== */
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -24,12 +32,11 @@ body {
   margin: 0;
   min-height: 100vh;
   font-family:
-    -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI",
-    sans-serif;
+    -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
   color: var(--ink);
-  background:
-    linear-gradient(180deg, #ffffff 0, #f5f5f7 280px),
-    var(--bg);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 button,
@@ -38,45 +45,49 @@ select {
   font: inherit;
 }
 
+/* === Layout ===================================== */
 .app-shell {
-  width: min(1380px, calc(100vw - 40px));
+  width: min(1400px, calc(100vw - 48px));
   margin: 0 auto;
-  padding: 38px 0 56px;
+  padding: 44px 0 72px;
 }
 
 .app-header {
   display: flex;
-  align-items: end;
+  align-items: flex-end;
   justify-content: space-between;
   gap: 24px;
-  margin-bottom: 28px;
+  margin-bottom: 32px;
 }
 
 .brand-row {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 16px;
 }
 
+/* === App Icon Mark ===================================== */
 .mark {
-  width: 52px;
-  height: 52px;
+  width: 56px;
+  height: 56px;
   display: grid;
   place-items: center;
-  border-radius: 8px;
+  border-radius: 14px;
   color: #ffffff;
-  background: linear-gradient(145deg, #0a84ff 0%, #0071e3 54%, #0057b8 100%);
-  box-shadow: 0 14px 34px rgba(0, 113, 227, 0.25);
-  font-weight: 760;
-  letter-spacing: 0;
+  background: linear-gradient(155deg, #47a9ff 0%, #007aff 46%, #0051d5 100%);
+  box-shadow: 0 4px 18px rgba(0, 122, 255, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.24);
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
 }
 
+/* === Typography ===================================== */
 .eyebrow {
-  margin: 0 0 5px;
+  margin: 0 0 4px;
   color: var(--muted);
-  font-size: 0.73rem;
-  font-weight: 720;
-  letter-spacing: 0.08em;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 
@@ -84,53 +95,56 @@ h1,
 h2,
 h3 {
   margin: 0;
-  letter-spacing: 0;
+  letter-spacing: -0.02em;
 }
 
 h1 {
-  font-size: clamp(2.4rem, 5vw, 4.6rem);
+  font-size: clamp(2.4rem, 5vw, 4.5rem);
   line-height: 0.94;
-  font-weight: 780;
+  font-weight: 700;
 }
 
 h2 {
-  font-size: 1.14rem;
-  font-weight: 720;
+  font-size: 1.1rem;
+  font-weight: 600;
 }
 
 h3 {
-  font-size: 0.98rem;
-  font-weight: 720;
+  font-size: 0.94rem;
+  font-weight: 600;
 }
 
 .header-copy {
-  max-width: 380px;
-  margin: 0 0 7px;
+  max-width: 360px;
+  margin: 0 0 6px;
   color: var(--muted);
-  font-size: 1.04rem;
+  font-size: 1rem;
   line-height: 1.45;
   text-align: right;
 }
 
+/* === Workspace ===================================== */
 .workspace {
   display: grid;
-  grid-template-columns: minmax(330px, 390px) minmax(0, 1fr);
-  gap: 22px;
+  grid-template-columns: minmax(320px, 375px) minmax(0, 1fr);
+  gap: 20px;
   align-items: start;
 }
 
+/* === Card Base ===================================== */
 .input-panel,
 .result-stage,
 .curve-card,
 .apple-section,
+.quick-stats,
 .note-panel {
-  border: 1px solid var(--line-soft);
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.86);
+  border: 0.5px solid var(--line-soft);
+  border-radius: var(--r-card);
+  background: var(--surface);
   box-shadow: var(--shadow);
-  backdrop-filter: blur(22px);
 }
 
+/* === Input Panel ===================================== */
 .input-panel {
   position: sticky;
   top: 20px;
@@ -140,59 +154,70 @@ h3 {
 .form-grid,
 .results-column {
   display: grid;
-  gap: 14px;
+  gap: 12px;
 }
 
+/* === Settings Groups ===================================== */
 .settings-group {
   display: grid;
-  gap: 12px;
-  border: 1px solid var(--line-soft);
-  border-radius: 8px;
-  padding: 16px;
-  background: var(--surface-soft);
-  box-shadow: var(--inner-shadow);
+  gap: 11px;
+  border-radius: var(--r-inner);
+  padding: 14px;
+  background: var(--fill-2);
+  border: 0.5px solid var(--line-soft);
 }
 
 .group-heading,
 .section-title {
   display: flex;
-  align-items: end;
+  align-items: flex-end;
   justify-content: space-between;
   gap: 12px;
 }
 
+/* === Form Fields ===================================== */
 .field {
   display: grid;
-  gap: 7px;
+  gap: 6px;
 }
 
 .field span,
 .segmented legend {
   color: var(--muted);
-  font-size: 0.84rem;
-  font-weight: 650;
+  font-size: 0.81rem;
+  font-weight: 500;
 }
 
 .field input,
 .field select {
   width: 100%;
-  min-height: 46px;
-  border: 1px solid transparent;
-  border-radius: 8px;
+  min-height: 44px;
+  border: none;
+  border-radius: var(--r-ctrl);
   padding: 0 13px;
   color: var(--ink);
-  background: #ffffff;
-  box-shadow:
-    inset 0 0 0 1px var(--line-soft),
-    0 1px 0 rgba(255, 255, 255, 0.8);
+  background: var(--surface);
+  box-shadow: inset 0 0 0 0.75px var(--line-soft), 0 1px 2px rgba(0, 0, 0, 0.04);
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  transition: box-shadow 0.15s ease;
+}
+
+.field select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1.5l5 5 5-5' stroke='%238e8e93' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 13px center;
+  padding-right: 36px;
 }
 
 .field input:focus,
 .field select:focus {
-  outline: 4px solid rgba(0, 113, 227, 0.14);
-  box-shadow: inset 0 0 0 1px var(--blue);
+  outline: none;
+  box-shadow: 0 0 0 3.5px rgba(0, 122, 255, 0.25), inset 0 0 0 1px var(--blue);
 }
 
+/* === Input grid layouts ===================================== */
 .custom-distance,
 .time-inputs,
 .pace-inputs,
@@ -200,7 +225,7 @@ h3 {
 .condition-grid,
 .profile-grid {
   display: grid;
-  gap: 10px;
+  gap: 9px;
 }
 
 .time-inputs,
@@ -210,7 +235,7 @@ h3 {
 }
 
 .custom-distance {
-  grid-template-columns: 1fr 92px;
+  grid-template-columns: 1fr 90px;
 }
 
 .secondary-effort {
@@ -222,20 +247,26 @@ h3 {
 }
 
 .compact {
-  min-width: 88px;
+  min-width: 86px;
 }
 
+/* === Segmented Control — iOS UISegmentedControl ===================================== */
 .segmented {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 8px;
   margin: 0;
-  padding: 0;
+  padding: 3px;
   border: 0;
+  border-radius: var(--r-ctrl);
+  background: var(--fill);
 }
 
 .segmented legend {
   grid-column: 1 / -1;
+  padding-bottom: 8px;
+  color: var(--muted);
+  font-size: 0.81rem;
+  font-weight: 500;
 }
 
 .segmented label {
@@ -244,139 +275,115 @@ h3 {
 
 .segmented input {
   position: absolute;
-  opacity: 0;
-  pointer-events: none;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
 }
 
 .segmented span {
   display: grid;
   place-items: center;
-  min-height: 42px;
+  min-height: 36px;
   border-radius: 8px;
   color: var(--muted);
-  background: #ffffff;
-  box-shadow: inset 0 0 0 1px var(--line-soft);
-  font-weight: 700;
+  background: transparent;
+  font-size: 0.87rem;
+  font-weight: 600;
+  transition: color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
 }
 
 .segmented input:checked + span {
-  color: #ffffff;
-  background: var(--blue);
-  box-shadow: 0 9px 22px rgba(0, 113, 227, 0.24);
+  color: var(--ink);
+  background: var(--surface);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12), 0 0.5px 1.5px rgba(0, 0, 0, 0.08);
 }
 
+.segmented input:focus-visible + span {
+  outline: 3.5px solid rgba(0, 122, 255, 0.3);
+  outline-offset: 1px;
+}
+
+/* === Checkbox Row ===================================== */
 .check-row {
   display: flex;
   align-items: center;
-  gap: 11px;
+  gap: 10px;
   min-height: 44px;
   color: var(--ink);
-  font-size: 0.93rem;
-  font-weight: 650;
+  font-size: 0.92rem;
+  font-weight: 500;
 }
 
 .check-row input {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   accent-color: var(--blue);
+  cursor: pointer;
 }
 
+/* === Utility Row ===================================== */
 .utility-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 2px 4px 0;
+  padding: 2px 2px 0;
   color: var(--muted);
-  font-size: 0.82rem;
-  font-weight: 620;
+  font-size: 0.81rem;
+  font-weight: 500;
 }
 
 .utility-row button {
-  min-height: 32px;
-  border: 0;
+  min-height: 30px;
+  border: none;
   border-radius: 999px;
-  padding: 0 13px;
+  padding: 0 14px;
   color: var(--blue);
-  background: rgba(0, 113, 227, 0.09);
-  box-shadow: inset 0 0 0 1px rgba(0, 113, 227, 0.12);
+  background: var(--blue-tint);
   cursor: pointer;
-  font-weight: 720;
+  font-size: 0.84rem;
+  font-weight: 600;
+  transition: background 0.15s ease, transform 0.1s ease;
 }
 
-.utility-row button:focus {
-  outline: 4px solid rgba(0, 113, 227, 0.14);
+.utility-row button:hover {
+  background: var(--blue-mid);
 }
 
+.utility-row button:active {
+  transform: scale(0.96);
+}
+
+.utility-row button:focus-visible {
+  outline: 3.5px solid rgba(0, 122, 255, 0.3);
+  outline-offset: 2px;
+}
+
+/* === Result Stage ===================================== */
 .result-stage {
   position: relative;
   overflow: hidden;
-  min-height: 300px;
-  padding: 26px;
-  background:
-    linear-gradient(180deg, rgba(234, 244, 255, 0.96), rgba(255, 255, 255, 0.96) 76%),
-    #ffffff;
+  min-height: 280px;
+  padding: 28px;
+}
+
+.result-stage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(155deg, rgba(0, 122, 255, 0.07) 0%, transparent 55%);
+  pointer-events: none;
 }
 
 .stage-content {
   position: relative;
   z-index: 1;
-  min-height: 248px;
+  min-height: 224px;
   display: grid;
   align-content: end;
   gap: 18px;
-}
-
-.curve-card {
-  display: grid;
-  gap: 12px;
-  padding: 18px;
-  background: #ffffff;
-}
-
-.curve-legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.curve-legend span {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  min-height: 30px;
-  border-radius: 999px;
-  padding: 6px 10px;
-  color: var(--muted);
-  background: var(--surface-soft);
-  box-shadow: inset 0 0 0 1px var(--line-soft);
-  font-size: 0.82rem;
-  font-weight: 680;
-}
-
-.dot {
-  width: 9px;
-  height: 9px;
-  border-radius: 999px;
-}
-
-.ideal-dot {
-  background: var(--green);
-}
-
-.race-dot {
-  background: var(--blue);
-}
-
-.future-dot {
-  background: var(--red);
-}
-
-#paceCanvas {
-  width: 100%;
-  height: 230px;
-  border-radius: 8px;
-  background: var(--surface-soft);
 }
 
 .result-header,
@@ -390,68 +397,110 @@ h3 {
 .main-result {
   display: block;
   color: var(--blue);
-  font-size: clamp(4rem, 9vw, 7.8rem);
-  font-weight: 800;
-  line-height: 0.87;
-  letter-spacing: 0;
+  font-size: clamp(3.6rem, 8vw, 7.4rem);
+  font-weight: 700;
+  line-height: 0.88;
+  letter-spacing: -0.04em;
 }
 
 .confidence {
   flex: 0 0 auto;
   border-radius: 999px;
-  padding: 9px 13px;
+  padding: 7px 13px;
   color: var(--blue);
-  background: rgba(0, 113, 227, 0.09);
-  box-shadow: inset 0 0 0 1px rgba(0, 113, 227, 0.12);
-  font-size: 0.84rem;
-  font-weight: 720;
+  background: var(--blue-tint);
+  font-size: 0.83rem;
+  font-weight: 600;
 }
 
 .training-band {
-  border-radius: 8px;
-  padding: 16px;
-  background: rgba(0, 113, 227, 0.08);
-  box-shadow: inset 0 0 0 1px rgba(0, 113, 227, 0.12);
+  border-radius: var(--r-inner);
+  padding: 15px 17px;
+  background: var(--blue-tint-2);
+  border: 0.5px solid rgba(0, 122, 255, 0.18);
 }
 
 .training-band output {
   color: var(--blue);
-  font-size: clamp(1.2rem, 3vw, 2rem);
-  font-weight: 780;
+  font-size: clamp(1.1rem, 2.6vw, 1.7rem);
+  font-weight: 700;
+  letter-spacing: -0.025em;
   text-align: right;
 }
 
-.quick-stats,
-.comparison-grid,
-.model-grid {
+/* === Curve Card ===================================== */
+.curve-card {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 12px;
+  padding: 18px;
 }
 
-.quick-stats > div,
-.comparison-grid > div,
-.model-grid > div {
-  min-height: 86px;
-  border-radius: 8px;
-  padding: 15px;
-  background: #ffffff;
-  box-shadow:
-    inset 0 0 0 1px var(--line-soft),
-    0 10px 24px rgba(0, 0, 0, 0.04);
+.curve-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
 }
 
+.curve-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 28px;
+  border-radius: 999px;
+  padding: 4px 10px;
+  color: var(--muted);
+  background: var(--fill-2);
+  border: 0.5px solid var(--line-soft);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+.ideal-dot { background: var(--green); }
+.race-dot  { background: var(--blue); }
+.future-dot { background: var(--red); }
+
+#paceCanvas {
+  width: 100%;
+  height: 220px;
+  border-radius: var(--r-ctrl);
+  background: var(--fill-2);
+}
+
+/* === Quick Stats ===================================== */
+.quick-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 8px;
+  padding: 14px;
+}
+
+.quick-stats > div {
+  min-height: 76px;
+  border-radius: var(--r-inner);
+  padding: 13px 14px;
+  background: var(--fill-2);
+  border: 0.5px solid var(--line-soft);
+}
+
+/* === Shared stat labels / values ===================================== */
 .quick-stats span,
 .comparison-grid span,
 .model-grid span,
 .interval-row span,
 .race-row span {
   display: block;
-  margin-bottom: 7px;
+  margin-bottom: 5px;
   color: var(--muted);
-  font-size: 0.74rem;
-  font-weight: 720;
-  letter-spacing: 0.07em;
+  font-size: 0.71rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 
@@ -459,29 +508,44 @@ h3 {
 .comparison-grid strong,
 .model-grid strong {
   display: block;
-  font-size: clamp(1.05rem, 2vw, 1.42rem);
-  font-weight: 760;
-  letter-spacing: 0;
+  font-size: clamp(0.98rem, 2vw, 1.28rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
 }
 
+/* === Apple Sections ===================================== */
 .apple-section {
   display: grid;
-  gap: 15px;
+  gap: 14px;
   padding: 18px;
 }
 
 .interval-section {
-  background:
-    linear-gradient(180deg, rgba(52, 199, 89, 0.08), rgba(255, 255, 255, 0.92) 42%),
-    #ffffff;
+  background: linear-gradient(170deg, rgba(52, 199, 89, 0.07) 0%, var(--surface) 48%);
 }
 
 .race-section {
-  background:
-    linear-gradient(180deg, rgba(255, 159, 10, 0.1), rgba(255, 255, 255, 0.93) 42%),
-    #ffffff;
+  background: linear-gradient(170deg, rgba(255, 149, 0, 0.09) 0%, var(--surface) 48%);
 }
 
+/* === Comparison + Model grids ===================================== */
+.comparison-grid,
+.model-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 8px;
+}
+
+.comparison-grid > div,
+.model-grid > div {
+  min-height: 76px;
+  border-radius: var(--r-inner);
+  padding: 13px 14px;
+  background: var(--fill-2);
+  border: 0.5px solid var(--line-soft);
+}
+
+/* === Interval Groups ===================================== */
 .interval-groups {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -489,13 +553,13 @@ h3 {
 }
 
 .interval-groups h3 {
-  margin-bottom: 9px;
+  margin-bottom: 8px;
 }
 
 .interval-table,
 .race-table {
   display: grid;
-  gap: 9px;
+  gap: 7px;
 }
 
 .interval-row,
@@ -503,11 +567,11 @@ h3 {
   display: grid;
   align-items: center;
   gap: 10px;
-  min-height: 62px;
-  border-radius: 8px;
-  padding: 12px;
-  background: rgba(255, 255, 255, 0.86);
-  box-shadow: inset 0 0 0 1px var(--line-soft);
+  min-height: 58px;
+  border-radius: var(--r-inner);
+  padding: 11px 14px;
+  background: var(--fill-2);
+  border: 0.5px solid var(--line-soft);
 }
 
 .interval-row {
@@ -522,31 +586,35 @@ h3 {
 .race-row strong {
   display: block;
   color: var(--ink);
-  font-size: 0.98rem;
-  font-weight: 720;
-  letter-spacing: 0;
+  font-size: 0.96rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
+/* === Note Panel ===================================== */
 .note-panel {
   padding: 16px 18px;
-  border-left: 4px solid var(--orange);
+  border-left: 3px solid var(--orange);
+  background: linear-gradient(90deg, rgba(255, 149, 0, 0.06) 0%, transparent 60%);
 }
 
 .note-panel p {
   margin: 0;
   color: var(--muted);
-  font-size: 0.95rem;
-  line-height: 1.55;
+  font-size: 0.92rem;
+  line-height: 1.56;
 }
 
+/* === Hidden ===================================== */
 [hidden] {
   display: none !important;
 }
 
+/* === Responsive: tablet ===================================== */
 @media (max-width: 980px) {
   .app-shell {
-    width: min(100vw - 24px, 720px);
-    padding: 24px 0 40px;
+    width: min(calc(100vw - 24px), 720px);
+    padding: 24px 0 44px;
   }
 
   .app-header {
@@ -580,16 +648,16 @@ h3 {
   }
 
   .custom-distance {
-    grid-template-columns: 1fr 92px;
+    grid-template-columns: 1fr 90px;
   }
 
   .result-stage {
-    min-height: 285px;
-    padding: 20px;
+    min-height: 260px;
+    padding: 22px;
   }
 
   .stage-content {
-    min-height: 245px;
+    min-height: 218px;
   }
 
   .result-header,
@@ -608,33 +676,37 @@ h3 {
   }
 }
 
+/* === Responsive: mobile ===================================== */
 @media (max-width: 520px) {
   .app-shell {
-    width: min(100vw - 16px, 420px);
+    width: calc(100vw - 16px);
     padding-top: 16px;
   }
 
   h1 {
-    font-size: 2.35rem;
+    font-size: 2.2rem;
   }
 
   .mark {
-    width: 46px;
-    height: 46px;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
   }
 
   .settings-group,
   .apple-section,
-  .result-stage {
+  .result-stage,
+  .quick-stats,
+  .curve-card {
     padding: 14px;
   }
 
   .main-result {
-    font-size: 3.45rem;
+    font-size: 3.2rem;
   }
 
   #paceCanvas {
-    height: 190px;
+    height: 180px;
   }
 
   .interval-row,
