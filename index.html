@@ -3,31 +3,36 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Threshold Pace Predictor</title>
+    <title>Threshold Pace · Runner Lab</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <main class="app-shell">
-      <header class="app-header">
-        <div class="brand-row">
-          <div class="mark" aria-hidden="true">TP</div>
+
+    <!-- ═══ Topbar ══════════════════════════════════════════════ -->
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="app-id">
+          <div class="app-icon" aria-hidden="true">TP</div>
           <div>
-            <p class="eyebrow">Runner Lab</p>
+            <p class="app-overline">Runner Lab</p>
             <h1>Threshold Pace</h1>
           </div>
         </div>
-        <p class="header-copy">Race-fit pacing for threshold work, intervals, and race day.</p>
-      </header>
+        <p class="topbar-tagline">Race-fit pacing for threshold work, intervals, and race day.</p>
+      </div>
+    </header>
 
-      <section class="workspace" aria-label="Threshold pace calculator">
-        <aside class="input-panel" aria-label="Inputs">
-          <form id="calculator" class="form-grid">
-            <section class="settings-group">
-              <div class="group-heading">
-                <p class="eyebrow">Race</p>
-                <h2>Performance</h2>
-              </div>
+    <!-- ═══ Main layout ══════════════════════════════════════════ -->
+    <div class="layout">
 
+      <!-- ── Left: Inputs ── -->
+      <aside class="sidebar" aria-label="Inputs">
+        <form id="calculator" class="sidebar-form">
+
+          <!-- 1 · Race Performance -->
+          <div class="form-section">
+            <p class="section-label">Race Performance</p>
+            <div class="section-body">
               <label class="field">
                 <span>Race distance</span>
                 <select id="distance">
@@ -99,14 +104,13 @@
                   </select>
                 </label>
               </div>
-            </section>
+            </div>
+          </div>
 
-            <section class="settings-group">
-              <div class="group-heading">
-                <p class="eyebrow">Race day</p>
-                <h2>Performance Conditions</h2>
-              </div>
-
+          <!-- 2 · Race Conditions -->
+          <div class="form-section">
+            <p class="section-label">Race Conditions</p>
+            <div class="section-body">
               <div class="condition-grid">
                 <label class="field">
                   <span>Temperature</span>
@@ -115,8 +119,8 @@
                 <label class="field compact">
                   <span>Unit</span>
                   <select id="raceTemperatureUnit">
-                    <option value="c">C</option>
-                    <option value="f">F</option>
+                    <option value="c">°C</option>
+                    <option value="f">°F</option>
                   </select>
                 </label>
                 <label class="field">
@@ -127,7 +131,7 @@
 
               <div class="profile-grid">
                 <label class="field">
-                  <span>Race profile distance</span>
+                  <span>Profile distance</span>
                   <input id="raceProfileDistance" type="number" min="0.1" step="0.1" value="5" inputmode="decimal" />
                 </label>
                 <label class="field compact">
@@ -138,11 +142,11 @@
                   </select>
                 </label>
                 <label class="field">
-                  <span>Elevation gain</span>
+                  <span>Elev. gain</span>
                   <input id="raceElevationGain" type="number" min="0" step="1" value="0" inputmode="numeric" />
                 </label>
                 <label class="field">
-                  <span>Elevation loss</span>
+                  <span>Elev. loss</span>
                   <input id="raceElevationLoss" type="number" min="0" step="1" value="0" inputmode="numeric" />
                 </label>
                 <label class="field compact">
@@ -153,14 +157,13 @@
                   </select>
                 </label>
               </div>
-            </section>
+            </div>
+          </div>
 
-            <section class="settings-group">
-              <div class="group-heading">
-                <p class="eyebrow">Model</p>
-                <h2>Threshold</h2>
-              </div>
-
+          <!-- 3 · Threshold Model -->
+          <div class="form-section">
+            <p class="section-label">Threshold Model</p>
+            <div class="section-body">
               <label class="field">
                 <span>Method</span>
                 <select id="thresholdMethod">
@@ -187,7 +190,7 @@
 
               <div class="secondary-effort" id="secondaryEffort" hidden>
                 <label class="field">
-                  <span>Second distance</span>
+                  <span>Distance</span>
                   <select id="secondDistance">
                     <option value="10">10K</option>
                     <option value="5">5K</option>
@@ -224,14 +227,13 @@
                   </select>
                 </label>
               </div>
-            </section>
+            </div>
+          </div>
 
-            <section class="settings-group">
-              <div class="group-heading">
-                <p class="eyebrow">Training / Future</p>
-                <h2>Weather and Route</h2>
-              </div>
-
+          <!-- 4 · Training / Future -->
+          <div class="form-section">
+            <p class="section-label">Training / Future</p>
+            <div class="section-body">
               <div class="condition-grid">
                 <label class="field">
                   <span>Temperature</span>
@@ -240,8 +242,8 @@
                 <label class="field compact">
                   <span>Unit</span>
                   <select id="temperatureUnit">
-                    <option value="c">C</option>
-                    <option value="f">F</option>
+                    <option value="c">°C</option>
+                    <option value="f">°F</option>
                   </select>
                 </label>
                 <label class="field">
@@ -263,11 +265,11 @@
                   </select>
                 </label>
                 <label class="field">
-                  <span>Elevation gain</span>
+                  <span>Elev. gain</span>
                   <input id="elevationGain" type="number" min="0" step="1" value="0" inputmode="numeric" />
                 </label>
                 <label class="field">
-                  <span>Elevation loss</span>
+                  <span>Elev. loss</span>
                   <input id="elevationLoss" type="number" min="0" step="1" value="0" inputmode="numeric" />
                 </label>
                 <label class="field compact">
@@ -278,52 +280,37 @@
                   </select>
                 </label>
               </div>
-            </section>
-
-            <div class="utility-row">
-              <span>Inputs are saved on this device.</span>
-              <button id="resetSavedData" type="button">Reset</button>
             </div>
-          </form>
-        </aside>
+          </div>
 
-        <section class="results-column" aria-label="Results">
-          <section class="result-stage">
-            <div class="stage-content">
-              <div class="result-header">
-                <div>
-                  <p class="eyebrow">Training / future LT2</p>
-                  <output id="thresholdPace" class="main-result">4:15 / km</output>
-                </div>
-                <div class="confidence" id="confidence">Good input</div>
-              </div>
+          <div class="sidebar-footer">
+            <span>Inputs saved on this device.</span>
+            <button id="resetSavedData" type="button">Reset</button>
+          </div>
 
-              <div class="training-band">
-                <div>
-                  <p class="eyebrow">Sub-threshold</p>
-                  <h2>Adjusted training band</h2>
-                </div>
-                <output id="trainingBand">4:18-4:23 / km</output>
-              </div>
+        </form>
+      </aside>
+
+      <!-- ── Right: Dashboard ── -->
+      <main class="dashboard" aria-label="Results">
+
+        <!-- Hero -->
+        <section class="hero-card">
+          <div class="hero-top">
+            <div class="hero-meta">
+              <p class="eyebrow">Training / Future LT2</p>
+              <output id="thresholdPace" class="hero-number">4:15 / km</output>
             </div>
-          </section>
-
-          <section class="curve-card" aria-label="Projected race curve">
-            <div class="section-title">
-              <div>
-                <p class="eyebrow">Race curve</p>
-                <h2>Projected pace context</h2>
-              </div>
+            <div class="hero-aside">
+              <div class="badge" id="confidence">Good input</div>
+              <p class="race-label" id="raceSummary">5K in 20:00</p>
             </div>
-            <div class="curve-legend" aria-label="Curve marker legend">
-              <span><i class="dot ideal-dot" aria-hidden="true"></i>Ideal LT2</span>
-              <span><i class="dot race-dot" aria-hidden="true"></i>Race-day LT2</span>
-              <span><i class="dot future-dot" aria-hidden="true"></i>Training / future LT2</span>
-            </div>
-            <canvas id="paceCanvas" width="900" height="360" aria-hidden="true"></canvas>
-          </section>
-
-          <section class="quick-stats">
+          </div>
+          <div class="band-box">
+            <p class="eyebrow">Adjusted sub-threshold band</p>
+            <output id="trainingBand" class="band-value">4:18-4:23 / km</output>
+          </div>
+          <div class="hero-stats">
             <div>
               <span>Ideal LT2</span>
               <strong id="pureThreshold">4:15 / km</strong>
@@ -337,50 +324,43 @@
               <strong id="thresholdMile">6:50 / mi</strong>
             </div>
             <div>
-              <span>Training weather</span>
-              <strong id="weatherEffect">+0.9%</strong>
+              <span>60-min distance</span>
+              <strong id="hourDistance">14.1 km</strong>
             </div>
-            <div>
-              <span>Training route</span>
-              <strong id="elevationEffect">+0.0%</strong>
-            </div>
-          </section>
+          </div>
+        </section>
 
-          <section class="apple-section">
-            <div class="section-title">
-              <p class="eyebrow">Summary</p>
-              <h2>Fitness and adjustment</h2>
-            </div>
-            <div class="comparison-grid">
+        <!-- Summary row -->
+        <div class="summary-row">
+          <section class="summary-card" aria-label="Adjustments">
+            <h2 class="card-title">Adjustments</h2>
+            <div class="summary-grid">
               <div>
-                <span>Ideal sub-threshold</span>
-                <strong id="pureTrainingBand">4:18-4:23 / km</strong>
-              </div>
-              <div>
-                <span>Race-day adjustment</span>
+                <span>Race-day</span>
                 <strong id="raceAdjustment">+0.9%</strong>
               </div>
               <div>
-                <span>Race equivalent</span>
-                <strong id="raceSummary">5K in 20:00</strong>
-              </div>
-              <div>
-                <span>Training adjustment</span>
+                <span>Training total</span>
                 <strong id="totalAdjustment">+0.9%</strong>
               </div>
               <div>
-                <span>Ideal 60-min distance</span>
-                <strong id="hourDistance">14.1 km</strong>
+                <span>Weather effect</span>
+                <strong id="weatherEffect">+0.9%</strong>
+              </div>
+              <div>
+                <span>Route effect</span>
+                <strong id="elevationEffect">+0.0%</strong>
+              </div>
+              <div class="span-two">
+                <span>Ideal sub-threshold</span>
+                <strong id="pureTrainingBand">4:18-4:23 / km</strong>
               </div>
             </div>
           </section>
 
-          <section class="apple-section">
-            <div class="section-title">
-              <p class="eyebrow">Model Check</p>
-              <h2>Estimate spread</h2>
-            </div>
-            <div class="model-grid">
+          <section class="summary-card" aria-label="Model check">
+            <h2 class="card-title">Model Check</h2>
+            <div class="summary-grid">
               <div>
                 <span>Riegel</span>
                 <strong id="riegelEstimate">4:15 / km</strong>
@@ -399,41 +379,62 @@
               </div>
             </div>
           </section>
+        </div>
 
-          <section class="apple-section interval-section">
-            <div class="section-title">
+        <!-- Pace Curve -->
+        <section class="chart-card" aria-label="Projected race curve">
+          <div class="card-header">
+            <div>
+              <p class="eyebrow">Race curve</p>
+              <h2>Projected pace context</h2>
+            </div>
+            <div class="chart-legend" aria-label="Curve marker legend">
+              <span><i class="dot ideal-dot" aria-hidden="true"></i>Ideal LT2</span>
+              <span><i class="dot race-dot" aria-hidden="true"></i>Race-day LT2</span>
+              <span><i class="dot future-dot" aria-hidden="true"></i>Training LT2</span>
+            </div>
+          </div>
+          <canvas id="paceCanvas" width="900" height="360" aria-hidden="true"></canvas>
+        </section>
+
+        <!-- Intervals -->
+        <section class="intervals-card" aria-label="Interval recommendations">
+          <div class="card-header">
+            <div>
               <p class="eyebrow">Intervals</p>
               <h2>Recommended ranges</h2>
             </div>
-
-            <div class="interval-groups">
-              <div>
-                <h3>Time-based</h3>
-                <div class="interval-table" id="timeIntervalTable"></div>
-              </div>
-              <div>
-                <h3>Distance-based</h3>
-                <div class="interval-table" id="distanceIntervalTable"></div>
-              </div>
+          </div>
+          <div class="intervals-cols">
+            <div>
+              <h3>Time-based</h3>
+              <div id="timeIntervalTable" class="interval-table"></div>
             </div>
-          </section>
+            <div>
+              <h3>Distance-based</h3>
+              <div id="distanceIntervalTable" class="interval-table"></div>
+            </div>
+          </div>
+        </section>
 
-          <section class="apple-section race-section">
-            <div class="section-title">
+        <!-- Race Projections -->
+        <section class="race-card" aria-label="Race projections">
+          <div class="card-header">
+            <div>
               <p class="eyebrow">Race Projection</p>
               <h2>Predicted pace ranges</h2>
             </div>
-            <div class="race-table" id="racePredictionTable"></div>
-          </section>
-
-          <section class="note-panel">
-            <p id="conditionNote">
-              Use ideal LT2 to track fitness. Use training/future LT2 when pacing a specific route, workout, or race day.
-            </p>
-          </section>
+          </div>
+          <div id="racePredictionTable" class="race-table"></div>
         </section>
-      </section>
-    </main>
+
+        <!-- Note -->
+        <div class="note-strip">
+          <p id="conditionNote">Use ideal LT2 to track fitness. Use training/future LT2 when pacing a specific route, workout, or race day.</p>
+        </div>
+
+      </main>
+    </div>
 
     <script src="script.js"></script>
   </body>
